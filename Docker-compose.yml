@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+    network:
+      - ecommerce-network
+
+  api-gateway:
+     build: ./eureka-server
+     ports:
+      - "8900:8900"
+     depends_on:
+      - eureka-server
+     network:
+      - ecommerce-network
+
+  product-catalog:
+    build: ./eureka-server
+    expose:
+      - "8810"
+    depends_on:
+      - database
+    network:
+      - ecommerce-network
+
+  order-service:
+    build: ./eureka-server
+    expose:
+      - "8813"
+    depends_on:
+      - database
+    network:
+      - ecommerce-network
+
+  user-service:
+    build: ./eureka-server
+    expose:
+      - "8811"
+    depends_on:
+      - database
+    network:
+      - ecommerce-network
+
+  recommendation-service:
+    build: ./eureka-server
+    ports:
+      - "8812"
+    depends_on:
+      - database
+    network:
+      - ecommerce-network
+
+  database:
+    image: mcr.microsoft.com/mysql/server:2019-latest
+    environment:
+      SA_password: "Password@1"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    netwroks: 
+      - ecommerce-netwrok
+
+networks:
+  e-commerce-network:
+    driver: bridge
+
+
