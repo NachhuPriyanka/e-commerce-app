@@ -1,70 +1,68 @@
-version: '3.8'
-
 services:
   eureka-server:
-    build: ./eureka-server
+    image: eureka-server
     ports:
       - "8761:8761"
-    network:
+    networks:
       - ecommerce-network
 
   api-gateway:
-     build: ./eureka-server
+     image: api-gateway
      ports:
       - "8900:8900"
      depends_on:
       - eureka-server
-     network:
+     networks:
       - ecommerce-network
 
   product-catalog:
-    build: ./eureka-server
+    image: product-catalog-service
     expose:
       - "8810"
     depends_on:
       - database
-    network:
+    networks:
       - ecommerce-network
 
   order-service:
-    build: ./eureka-server
+    build: order-service
     expose:
       - "8813"
     depends_on:
       - database
-    network:
+    networks:
       - ecommerce-network
 
   user-service:
-    build: ./eureka-server
+    build: user-service
     expose:
       - "8811"
     depends_on:
       - database
-    network:
+    networks:
       - ecommerce-network
 
   recommendation-service:
-    build: ./eureka-server
+    build: product-recommendation-service
     ports:
       - "8812"
     depends_on:
       - database
-    network:
+    networks:
       - ecommerce-network
 
   database:
-    image: mcr.microsoft.com/mysql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest  # SQL Server 2016 image
     environment:
       SA_password: "Password@1"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
-    netwroks: 
-      - ecommerce-netwrok
+    networks: 
+      - ecommerce-network
 
 networks:
-  e-commerce-network:
+  ecommerce-network:
     driver: bridge
 
 

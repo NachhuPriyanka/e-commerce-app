@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Step 3: Copy the jar file into the container
 # Assuming your Java app is built into a JAR file, change the filename if necessary
-COPY . /app.jar
+COPY target/eureka-server-0.0.1-SNAPSHOT.jar app.jar
 
 # Step 4: Expose the port that the application will run on (e.g., port 8080 for Spring Boot)
 EXPOSE 8761
